@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhashita (भाषित) — Sanskrit-Native AI & Manuscript Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* High-contrast computational light mode theme */
+    --bg-base: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #F1F5F9;
+    --border-dim: rgba(15, 23, 42, 0.12);
+    --border-active: #B45309;
+    --border-cyan: rgba(2, 132, 199, 0.35);
+    
+    --text-main: #0F172A;
+    --text-muted: #475569;
+    --text-dim: #64748B;
+    
+    --gold: #B45309;
+    --gold-glow: rgba(180, 83, 9, 0.08);
+    --cyan: #0284C7;
+    --vermilion: #DC2626;
+    --green-code: #059669;
+
+    --font-serif: 'Spectral', serif;
+    --font-deva: 'Noto Serif Devanagari', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  body {
+    overflow-x: hidden;
+    background-image: 
+      radial-gradient(circle at 80% 10%, rgba(2, 132, 199, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 10% 60%, rgba(180, 83, 9, 0.04) 0%, transparent 50%);
+  }
+
+  /* Accessibility focus styles */
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* Structural Grid Layout */
+  .grid-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header Navigation */
+  header {
+    border-bottom: 1px solid var(--border-dim);
+    position: sticky;
+    top: 0;
+    background: rgba(248, 250, 252, 0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 72px;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-main);
+  }
+
+  .brand-deva {
+    font-family: var(--font-deva);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .brand-latin {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: var(--gold);
+  }
+
+  .nav-num {
+    color: var(--gold);
+    margin-right: 4px;
+  }
+
+  .btn-action {
+    background: var(--bg-surface);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 18px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-action:hover {
+    background: var(--gold);
+    color: #FFFFFF;
+  }
+
+  /* SECTION: HERO — LIVE DECOMPOSITION ENGINE */
+  .hero-section {
+    padding: 60px 0 80px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .hero-title-area h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--text-main);
+    margin-bottom: 24px;
+  }
+
+  .hero-title-area h1 span.deva-inline {
+    font-family: var(--font-deva);
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .hero-description {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* Interactive Sanskrit Decomposition Visualizer */
+  .sandbox-terminal {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-cyan);
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    position: relative;
+  }
+
+  .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .terminal-title {
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .terminal-pulse {
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  .raw-input-box {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-dim);
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .raw-input-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .raw-sanskrit-text {
+    font-family: var(--font-deva);
+    font-size: 1.35rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    font-weight: 600;
+  }
+
+  .decomposition-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tree-node {
+    background: var(--bg-surface-elevated);
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+
+  .tree-node:hover {
+    transform: translateX(4px);
+  }
+
+  .node-san {
+    font-family: var(--font-deva);
+    font-size: 1.1rem;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  .node-meta {
+    font-size: 0.75rem;
+    color: var(--cyan);
+    text-align: right;
+  }
+
+  .node-sutra {
+    font-size: 0.7rem;
+    color: var(--green-code);
+    display: block;
+    font-weight: 500;
+  }
+
+  /* SECTION: STAT MOMENT */
+  .stats-bar {
+    border-bottom: 1px solid var(--border-dim);
+    background: var(--bg-surface);
+    padding: 40px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .stat-card {
+    border-left: 2px solid var(--border-active);
+    padding-left: 20px;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .scripts-badge-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .script-tag {
+    background: rgba(180, 83, 9, 0.08);
+    border: 1px solid rgba(180, 83, 9, 0.25);
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 2px 8px;
+  }
+
+  /* SECTION: THE PIPELINE */
+  .section-padding {
+    padding: 90px 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .section-header-block {
+    margin-bottom: 50px;
+  }
+
+  .section-tag {
+    font-size: 0.75rem;
+    color: var(--cyan);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .section-heading {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  .pipeline-flow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+
+  .pipeline-step {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    padding: 18px 12px;
+    min-width: 140px;
+    position: relative;
+  }
+
+  .pipeline-step.active-step {
+    border-color: var(--gold);
+    background: var(--bg-surface-elevated);
+  }
+
+  .step-num {
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .step-name {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  /* SECTION: CAPABILITY PILLARS */
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .capability-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    padding: 32px;
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .capability-card:hover {
+    border-color: var(--border-cyan);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  .cap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .cap-title {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  .cap-deva {
+    font-family: var(--font-deva);
+    color: var(--gold);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .cap-body {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .cap-feature-list {
+    margin-top: 20px;
+    list-style: none;
+  }
+
+  .cap-feature-item {
+    font-size: 0.78rem;
+    color: var(--cyan);
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cap-feature-item::before {
+    content: "■";
+    font-size: 0.5rem;
+    color: var(--gold);
+  }
+
+  /* SECTION: WORKED EXAMPLE (BOTANICAL EXTRACTION) */
+  .example-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    padding: 36px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  }
+
+  .example-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .manuscript-input-pane {
+    border-right: 1px solid var(--border-dim);
+    padding-right: 40px;
+  }
+
+  .verse-display-box {
+    background: var(--bg-surface-elevated);
+    border-left: 3px solid var(--vermilion);
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .verse-deva {
+    font-family: var(--font-deva);
+    font-size: 1.4rem;
+    color: var(--gold);
+    font-weight: 600;
+    line-height: 1.8;
+  }
+
+  .verse-citation {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 10px;
+  }
+
+  .extraction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+
+  .extraction-table th, .extraction-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 0.82rem;
+  }
+
+  .extraction-table th {
+    color: var(--text-dim);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .extraction-table td.field-key {
+    color: var(--cyan);
+    font-weight: 500;
+    width: 35%;
+  }
+
+  .extraction-table td.field-val {
+    color: var(--text-main);
+  }
+
+  /* SECTION: STAKEHOLDERS */
+  .stakeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .stakeholder-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    padding: 24px 20px;
+  }
+
+  .stake-title {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .stake-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* SECTION: CLOSING CTA */
+  .cta-section {
+    padding: 100px 0;
+    background: radial-gradient(circle at center, rgba(180, 83, 9, 0.04) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .cta-box {
+    max-width: 780px;
+  }
+
+  .cta-box h2 {
+    font-family: var(--font-serif);
+    font-size: 2.6rem;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .cta-box p {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    background: var(--bg-surface);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .capabilities-grid { grid-template-columns: 1fr; }
+    .example-grid { grid-template-columns: 1fr; }
+    .manuscript-input-pane { border-right: none; padding-right: 0; border-bottom: 1px solid var(--border-dim); padding-bottom: 30px; }
+    .stakeholder-grid { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-flow { display: flex; flex-direction: column; }
+  }
+
+  @media (max-width: 640px) {
+    .nav-menu { display: none; }
+    .stakeholder-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="grid-container">
+      <nav class="nav-inner" aria-label="Main Navigation">
+        <a href="#" class="brand-logo">
+          <span class="brand-deva">भाषित</span>
+          <span class="brand-latin">BHASHITA</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="#pipeline" class="nav-link"><span class="nav-num">01.</span>Pipeline</a></li>
+          <li><a href="#capabilities" class="nav-link"><span class="nav-num">02.</span>Architecture</a></li>
+          <li><a href="#worked-example" class="nav-link"><span class="nav-num">03.</span>Ayurveda Case</a></li>
+          <li><a href="#stakeholders" class="nav-link"><span class="nav-num">04.</span>Ecosystem</a></li>
+        </ul>
+
+        <a href="#concept-note" class="btn-action">[ Request Protocol Demo ]</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="grid-container">
+        <div class="hero-grid">
+          
+          <div class="hero-title-area">
+            <h1>Sanskrit-Native AI <br>and Manuscript Intelligence <span class="deva-inline">संस्कृत-ज्ञानम्</span></h1>
+            
+            <p class="hero-description">
+              Bhashita converts millions of decaying, uncatalogued palm-leaf and paper manuscripts into a machine-readable, commentary-aware knowledge network using Pāṇinian generative grammar as a hard validation constraint.
+            </p>
+
+            <div class="hero-cta-group">
+              <a href="#concept-note" class="btn-action">[ Request Institutional Access ]</a>
+              <a href="#worked-example" style="color: var(--cyan); text-decoration: none; font-size: 0.82rem; font-weight: 500;">View Botanical Worked Example ↓</a>
+            </div>
+          </div>
+
+          <!-- BOLD MOMENT: Interactive Sandhi Decomposition Engine -->
+          <div class="sandbox-terminal" id="sandhi-interactive-engine">
+            <div class="terminal-header">
+              <div class="terminal-title">
+                <span class="terminal-pulse"></span>
+                LIVE_PĀṆINIAN_MORPHO_PARSER v2.4
+              </div>
+              <div>SCRIPT: DEVANAGARI / GRANTHA</div>
+            </div>
+
+            <div class="raw-input-box">
+              <span class="raw-input-label">// CONTINUOUS COMPOUND INPUT</span>
+              <div class="raw-sanskrit-text" id="active-compound">साविद्यायाविमुक्तये</div>
+            </div>
+
+            <div class="decomposition-tree">
+              <div class="tree-node">
+                <div>
+                  <span class="node-san">सा</span>
+                  <span style="font-size:0.75rem; color:var(--text-dim); margin-left:8px;">(sā)</span>
+                </div>
+                <div class="node-meta">
+                  <span>Pronoun / Nom. Sing. Fem.</span>
+                  <span class="node-sutra">Pāṇini 7.2.102 (त्यदादीनामः)</span>
+                </div>
+              </div>
+
+              <div class="tree-node">
+                <div>
+                  <span class="node-san">विद्या</span>
+                  <span style="font-size:0.75rem; color:var(--text-dim); margin-left:8px;">(vidyā)</span>
+                </div>
+                <div class="node-meta">
+                  <span>Noun Root [vid] / Nom. Sing.</span>
+                  <span class="node-sutra">Pāṇini 3.3.103 (गुरोश्च हलः)</span>
+                </div>
+              </div>
+
+              <div class="tree-node">
+                <div>
+                  <span class="node-san">या</span>
+                  <span style="font-size:0.75rem; color:var(--text-dim); margin-left:8px;">(yā)</span>
+                </div>
+                <div class="node-meta">
+                  <span>Rel. Pronoun / Nom. Sing.</span>
+                  <span class="node-sutra">Pāṇini 6.1.101 (अकः सवर्णे दीर्घः)</span>
+                </div>
+              </div>
+
+              <div class="tree-node">
+                <div>
+                  <span class="node-san">विमुक्तये</span>
+                  <span style="font-size:0.75rem; color:var(--text-dim); margin-left:8px;">(vimuktaye)</span>
+                </div>
+                <div class="node-meta">
+                  <span>Noun [vi-muc] / Dat. Sing.</span>
+                  <span class="node-sutra">Pāṇini 1.4.32 (कर्मणा यमभिप्रैति)</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px; font-size: 0.72rem; color: var(--text-dim); display: flex; justify-content: space-between;">
+              <span>Semantic Output: "That is knowledge which liberates."</span>
+              <span style="color: var(--green-code); font-weight: 600;">PĀṆINIAN_VALIDATED: TRUE</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- STAT MOMENT -->
+    <section class="stats-bar">
+      <div class="grid-container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">30M+</div>
+            <div class="stat-label">Physical manuscripts across Indian archives and private collections</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-value">~95%</div>
+            <div class="stat-label">Remain uncatalogued, untranslated, or physically decaying</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-value">5+ Scripts</div>
+            <div class="stat-label">Historical non-Devanagari script support</div>
+            <div class="scripts-badge-group">
+              <span class="script-tag">Grantha</span>
+              <span class="script-tag">Śāradā</span>
+              <span class="script-tag">Tigalari</span>
+              <span class="script-tag">Nandinagari</span>
+              <span class="script-tag">Newari</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIPELINE SECTION -->
+    <section id="pipeline" class="section-padding">
+      <div class="grid-container">
+        <div class="section-header-block">
+          <span class="section-tag">[ ARCHITECTURE_PIPELINE ]</span>
+          <h2 class="section-heading">From Physical Decay to Structured Knowledge</h2>
+        </div>
+
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <span class="step-num">01 / INPUT</span>
+            <div class="step-name">Palm-Leaf / Paper</div>
+            <div class="step-desc">Physical damaged manuscript acquisition.</div>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-num">02 / VISION</span>
+            <div class="step-name">Inpainting OCR</div>
+            <div class="step-desc">Computer vision restores stain, tear & fade areas.</div>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-num">03 / SCRIPT</span>
+            <div class="step-name">Script Engine</div>
+            <div class="step-desc">Multi-script identification & normalization.</div>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-num">04 / TEXT</span>
+            <div class="step-name">Transcription</div>
+            <div class="step-desc">Diplomatic and normalized text output.</div>
+          </div>
+
+          <div class="pipeline-step active-step">
+            <span class="step-num">05 / PARSER</span>
+            <div class="step-name">Sandhi & Samāsa</div>
+            <div class="step-desc">Pāṇinian grammar rule constraints applied.</div>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-num">06 / GRAPH</span>
+            <div class="step-name">Commentary Graph</div>
+            <div class="step-desc">Linking Sūtra to Bhāṣya and Ṭīkā layers.</div>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-num">07 / QUERY</span>
+            <div class="step-name">Knowledge Search</div>
+            <div class="step-desc">Semantic, lemma & contextual discovery.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOUR CAPABILITY AREAS -->
+    <section id="capabilities" class="section-padding" style="background: var(--bg-surface-elevated);">
+      <div class="grid-container">
+        <div class="section-header-block">
+          <span class="section-tag">[ CORE_CAPABILITIES ]</span>
+          <h2 class="section-heading">Engineered for Sanskrit's Unique Structure</h2>
+        </div>
+
+        <div class="capabilities-grid">
+          
+          <div class="capability-card">
+            <div class="cap-header">
+              <h3 class="cap-title">Vision & Restoration</h3>
+              <span class="cap-deva">दृष्टि-संस्कार</span>
+            </div>
+            <p class="cap-body">
+              Manuscript degradation creates visual breaks that standard OCR mistakes for characters. Our vision models perform stain segmentation, background suppression, and character inpainting without hallucinating text.
+            </p>
+            <ul class="cap-feature-list">
+              <li class="cap-feature-item">Palm-leaf damage segmentation</li>
+              <li class="cap-feature-item">Historical script recognition (Grantha, Śāradā, Tigalari)</li>
+              <li class="cap-feature-item">Non-destructive digital restoration</li>
+            </ul>
+          </div>
+
+          <div class="capability-card">
+            <div class="cap-header">
+              <h3 class="cap-title">Linguistic Intelligence</h3>
+              <span class="cap-deva">व्याकरण-विश्लेषण</span>
+            </div>
+            <p class="cap-body">
+              Standard LLMs treat Sanskrit as unstructured tokens, causing wild hallucinations during sandhi splitting. Bhashita uses Ashtadhyayi rule-based constraints as a mandatory validation layer.
+            </p>
+            <ul class="cap-feature-list">
+              <li class="cap-feature-item">Pāṇinian-constrained sandhi-viccheda</li>
+              <li class="cap-feature-item">Samāsa-vigraha (compound resolution)</li>
+              <li class="cap-feature-item">Dhātu (verb root) & pratyaya derivation</li>
+            </ul>
+          </div>
+
+          <div class="capability-card">
+            <div class="cap-header">
+              <h3 class="cap-title">Knowledge & Retrieval</h3>
+              <span class="cap-deva">भाष्य-परम्परा</span>
+            </div>
+            <p class="cap-body">
+              A Sanskrit root text cannot be understood without its commentary chain. Bhashita indexes primary verses directly alongside historical bhāṣya, ṭīkā, and tippani lineages.
+            </p>
+            <ul class="cap-feature-list">
+              <li class="cap-feature-item">Sūtra-to-Bhāṣya knowledge graphs</li>
+              <li class="cap-feature-item">Cross-textual citation tracking</li>
+              <li class="cap-feature-item">Morphology-aware semantic search</li>
+            </ul>
+          </div>
+
+          <div class="capability-card">
+            <div class="cap-header">
+              <h3 class="cap-title">Domain Applications</h3>
+              <span class="cap-deva">प्रयोग-क्षेत्र</span>
+            </div>
+            <p class="cap-body">
+              Tailored analytical tooling built for multi-disciplinary scholarship—from extracting classical botanical formulations to assisting philological critical editions.
+            </p>
+            <ul class="cap-feature-list">
+              <li class="cap-feature-item">Ayurvedic botanical & formulation mapping</li>
+              <li class="cap-feature-item">Interactive research assistant for philologists</li>
+              <li class="cap-feature-item">Pedagogical grammar verification tools</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKED EXAMPLE: BOTANICAL RESOLUTION -->
+    <section id="worked-example" class="section-padding">
+      <div class="grid-container">
+        <div class="section-header-block">
+          <span class="section-tag">[ WORKED_EXAMPLE // AYURVEDA_BOTANICAL_EXTRACTION ]</span>
+          <h2 class="section-heading">Resolving Ancient Formulary Verse into Structured Knowledge</h2>
+        </div>
+
+        <div class="example-container">
+          <div class="example-grid">
+            
+            <div class="manuscript-input-pane">
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-weight: 500;">// INPUT MANUSCRIPT VERSE</span>
+              
+              <div class="verse-display-box">
+                <div class="verse-deva">
+                  गुडूची मधुरा तिक्ता वीर्योष्णा कफपित्तनुत् ।<br>
+                  दीपनी ग्राहिणी हृद्या रसयानी ज्वरापहा ॥
+                </div>
+                <div class="verse-citation">Bhāvaprakāśa Nighaṇṭu — Gudūcyādi Varga, Śloka 8</div>
+              </div>
+
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                Unstructured classical verses use poetic epithets and compound adjectives to describe medicinal flora. Generic LLMs misclassify compound properties or hallucinate botanical taxa.
+              </p>
+            </div>
+
+            <div class="structured-output-pane">
+              <span style="font-size: 0.72rem; color: var(--green-code); font-weight: 600;">// BHASHITA STRUCTURED ENTITY OUTPUT</span>
+              
+              <table class="extraction-table">
+                <thead>
+                  <tr>
+                    <th>Attribute</th>
+                    <th>Extracted Knowledge Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="field-key">Primary Entity</td>
+                    <td class="field-val"><strong style="color:var(--gold);">गुडूची (Guḍūcī) / Amṛtā</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Botanical Taxonomy</td>
+                    <td class="field-val" style="color:var(--cyan); font-weight:500;"><em>Tinospora cordifolia</em> (Willd.) Hook.f. & Thoms.</td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Rasa (Taste Profile)</td>
+                    <td class="field-val">Madhura (Sweet), Tikta (Bitter)</td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Vīrya (Potency)</td>
+                    <td class="field-val">Uṣṇa (Thermal Heating)</td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Dosha Karma</td>
+                    <td class="field-val">Kapha-Pitta Pacifying (कफपित्तनुत्)</td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Therapeutic Indication</td>
+                    <td class="field-val">Jvarāpahā (Antipyretic / Fever Treatment)</td>
+                  </tr>
+                  <tr>
+                    <td class="field-key">Chemical Registry Linkage</td>
+                    <td class="field-val" style="font-family:var(--font-mono); font-size:0.75rem;">PubChem CID: 5281821 / IMPPAT: IMP00223</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAKEHOLDERS -->
+    <section id="stakeholders" class="section-padding" style="background: var(--bg-surface-elevated);">
+      <div class="grid-container">
+        <div class="section-header-block">
+          <span class="section-tag">[ ECOSYSTEM_PARTNERS ]</span>
+          <h2 class="section-heading">Designed for Mission-Critical Stewardship</h2>
+        </div>
+
+        <div class="stakeholder-grid">
+          <div class="stakeholder-card">
+            <div class="stake-title">Government & Public Bodies</div>
+            <div class="stake-desc">
+              National manuscript missions, state archives, and cultural preservation departments requiring scalable, standardized cataloguing infrastructure.
+            </div>
+          </div>
+
+          <div class="stakeholder-card">
+            <div class="stake-title">Academic Institutions</div>
+            <div class="stake-desc">
+              Sanskrit universities, Indology departments, and digital humanities labs performing comparative philology and critical editions.
+            </div>
+          </div>
+
+          <div class="stakeholder-card">
+            <div class="stake-title">Healthcare & Pharma R&D</div>
+            <div class="stake-desc">
+              Natural product chemistry and Ayurvedic research teams seeking verified, cross-referenced classical formulation data.
+            </div>
+          </div>
+
+          <div class="stakeholder-card">
+            <div class="stake-title">Philanthropic Foundations</div>
+            <div class="stake-desc">
+              Heritage preservation funders and tech-for-good endowments supporting open access to ancient knowledge systems.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section id="concept-note" class="cta-section">
+      <div class="grid-container">
+        <div class="cta-box">
+          <h2>Bring Centuries of Silent Knowledge Online</h2>
+          <p>
+            Whether you manage an institutional repository, fund digital heritage, or conduct pharmacological research, Bhashita offers bespoke pipeline integration and research partnerships.
+          </p>
+
+          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <a href="mailto:contact@bhashita.ai" class="btn-action" style="padding: 12px 28px; font-size: 0.9rem;">
+              [ Schedule Institutional Demo ]
+            </a>
+            <a href="#" class="btn-action" style="border-color: var(--border-cyan); color: var(--cyan); padding: 12px 28px; font-size: 0.9rem;">
+              Download Technical Concept Note (PDF)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="grid-container">
+      <div class="footer-inner">
+        <div>
+          <span style="color:var(--gold); font-family:var(--font-deva); font-size:1.1rem; font-weight:700; margin-right:8px;">भाषित</span>
+          <span>Bhashita Platform — Sanskrit-Native Intelligence Engine</span>
+        </div>
+        <div>
+          © 2026 Bhashita Systems. Built for Cultural Stewardship.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
